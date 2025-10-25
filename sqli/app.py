@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from aiohttp.web import Application
 from aiohttp_jinja2 import setup as setup_jinja
-from jinja2.loaders import PackageLoader
+from jinja2 import PackageLoader
 from trafaret_config import commandline
 
 from sqli.middlewares import session_middleware, error_middleware
@@ -31,8 +31,7 @@ def init(argv):
     app['config'] = config
 
     setup_jinja(app, loader=PackageLoader('sqli', 'templates'),
-                context_processors=[csrf_processor, auth_user_processor],
-                autoescape=False)
+                context_processors=[csrf_processor, auth_user_processor])
     setup_database(app)
     setup_redis(app)
     setup_routes(app)
