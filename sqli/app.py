@@ -1,7 +1,10 @@
 from argparse import ArgumentParser
+from functools import partial
+import yaml
 
 from aiohttp.web import Application
 from aiohttp_jinja2 import setup as setup_jinja
+from jinja2 import select_autoescape
 from jinja2.loaders import PackageLoader
 from trafaret_config import commandline
 
@@ -15,6 +18,10 @@ from .routes import setup_routes
 
 def init(argv):
     ap = ArgumentParser()
+    
+    # Monkey-patch yaml.load for compatibility with PyYAML>=5.1 as trafaret-config uses it unsafely.
+    yaml.load = partial(yaml.load, Loader=yaml.SafeLoader)
+
     commandline.standard_argparse_options(ap, default_config='./config/dev.yaml')
     options = ap.parse_args(argv)
 
@@ -32,7 +39,7 @@ def init(argv):
 
     setup_jinja(app, loader=PackageLoader('sqli', 'templates'),
                 context_processors=[csrf_processor, auth_user_processor],
-                autoescape=False)
+                autoescape=select_autoescape(['html', 'xml', 'jinja2']))
     setup_database(app)
     setup_redis(app)
     setup_routes(app)
