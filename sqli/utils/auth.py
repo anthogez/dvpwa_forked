@@ -1,9 +1,8 @@
 from functools import wraps
 from typing import Optional
 
-from aiohttp.web import Application
+from aiohttp.web import Application, Request
 from aiohttp.web_exceptions import HTTPForbidden, HTTPUnauthorized
-from aiohttp.web_request import Request
 from aiohttp_session import get_session
 
 from sqli.dao.user import User
