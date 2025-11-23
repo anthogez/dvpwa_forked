@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from aiohttp.web import Application
 from aiohttp_jinja2 import setup as setup_jinja
-from jinja2.loaders import PackageLoader
+from jinja2 import PackageLoader
 from trafaret_config import commandline
 
 from sqli.middlewares import session_middleware, error_middleware
