@@ -21,13 +21,11 @@ def init(argv):
     config = commandline.config_from_options(options, CONFIG_SCHEMA)
 
     app = Application(
-        debug=True,
-        middlewares=[
-            session_middleware,
-            # csrf_middleware,
-            error_middleware,
-        ]
+        debug=True
     )
+    app.middlewares.append(session_middleware)
+    # app.middlewares.append(csrf_middleware)
+    app.middlewares.append(error_middleware)
     app['config'] = config
 
     setup_jinja(app, loader=PackageLoader('sqli', 'templates'),
